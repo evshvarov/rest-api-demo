@@ -21,7 +21,21 @@ XData UrlMap [ XMLNamespace = "http://www.intersystems.com/urlmap" ]
 <!-- Create a person-->
 <Route Url="/persons/" Method="POST" Call="CreatePerson"/>
 
+<!-- GET method to return JSON for a given person id-->
+<Route Url="/persons/generate/:amount" Method="GET" Call="GeneratePersons"/>
+
+
 </Routes>
+}
+
+/// Generate test data
+ClassMethod GeneratePersons(amount As %Integer = 10) As %Status
+{
+    do ##class(Sample.Person).Populate(amount)
+    SET ret = {
+    "New records generated": (amount)  
+  }
+    RETURN ..%ProcessResult($$$OK, ret)
 }
 
 /// PersonsREST general information
